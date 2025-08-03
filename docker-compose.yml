@@ -1,10 +1,8 @@
 services:
   store-app:
     build:
-      context: . # Build from the root of the project
+      context: ./store-app
       dockerfile: Dockerfile
-      args:
-        APP_NAME: store-app # Tell Docker which app to build
     container_name: store-app
     ports:
       - "3000:3000"
@@ -12,10 +10,8 @@ services:
 
   cart-app:
     build:
-      context: . # Build from the root of the project
+      context: ./cart-app
       dockerfile: Dockerfile
-      args:
-        APP_NAME: cart-app # Tell Docker which app to build
     container_name: cart-app
     ports:
       - "3001:3000"

@@ -1,4 +1,7 @@
+"use client"; // This component is now interactive, so it must be a client component
+
 import Image from "next/image";
+import { useCartStore } from "@/store/cartStore";
 
 interface ProductCardProps {
   id: number;
@@ -7,7 +10,14 @@ interface ProductCardProps {
   imageUrl: string;
 }
 
-export function ProductCard({ name, price, imageUrl }: ProductCardProps) {
+export function ProductCard({ id, name, price, imageUrl }: ProductCardProps) {
+  const addToCart = useCartStore((state) => state.addToCart);
+
+  const handleAddToCart = () => {
+    addToCart({ id, name, price, imageUrl });
+    alert(`${name} added to cart!`);
+  };
+
   return (
     <div className="border rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
       <div className="relative w-full h-60">
@@ -22,7 +32,10 @@ export function ProductCard({ name, price, imageUrl }: ProductCardProps) {
       <div className="p-4">
         <h3 className="text-lg font-semibold text-gray-800">{name}</h3>
         <p className="text-gray-600 mt-1">${price.toFixed(2)}</p>
-        <button className="mt-4 w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition-colors">
+        <button
+          onClick={handleAddToCart}
+          className="mt-4 w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition-colors"
+        >
           Add to Cart
         </button>
       </div>

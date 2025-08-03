@@ -1,8 +1,10 @@
 services:
   store-app:
     build:
-      context: ./store-app
+      context: . # Build from the root of the project
       dockerfile: Dockerfile
+      args:
+        APP_NAME: store-app # Tell Docker which app to build
     container_name: store-app
     ports:
       - "3000:3000"
@@ -10,11 +12,11 @@ services:
 
   cart-app:
     build:
-      context: ./cart-app
+      context: . # Build from the root of the project
       dockerfile: Dockerfile
+      args:
+        APP_NAME: cart-app # Tell Docker which app to build
     container_name: cart-app
-    # We expose the port internally to the Docker network, but not to the host machine.
-    # The store-app will access it via its container name 'cart-app'.
     ports:
-      - "3001:3000" # Maps port 3001 on the host to port 3000 in the container
+      - "3001:3000"
     restart: unless-stopped

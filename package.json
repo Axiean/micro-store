@@ -1,0 +1,8 @@
+{
+  "name": "micro-store",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

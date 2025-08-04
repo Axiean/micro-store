@@ -32,7 +32,7 @@ export function CartItemCard({
         <p className="text-sm text-slate-500">${item.price.toFixed(2)} each</p>
         <button
           onClick={() => removeItem(item.id)}
-          className="text-red-500 text-sm hover:underline mt-2 font-medium"
+          className="text-red-500 text-sm hover:underline mt-2 font-medium hover:cursor-pointer"
         >
           Remove
         </button>
@@ -40,14 +40,16 @@ export function CartItemCard({
       <div className="flex items-center gap-3">
         <button
           onClick={() => updateQuantity(item.id, "decrease")}
-          className="px-3 py-1 border rounded-md hover:bg-slate-100 transition"
+          className="px-3 py-1 border rounded-md hover:bg-slate-100 transition text-black hover:cursor-pointer"
         >
           -
         </button>
-        <span className="font-semibold w-8 text-center">{item.quantity}</span>
+        <span className="font-semibold w-8 text-center text-black">
+          {item.quantity}
+        </span>
         <button
           onClick={() => updateQuantity(item.id, "increase")}
-          className="px-3 py-1 border rounded-md hover:bg-slate-100 transition"
+          className="px-3 py-1 border rounded-md hover:bg-slate-100 transition text-black hover:cursor-pointer"
         >
           +
         </button>

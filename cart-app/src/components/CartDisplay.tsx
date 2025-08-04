@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 
 export function CartDisplay() {
-  const { items } = useCartStore();
+  const { items, addToCart, removeItem, updateQuantity } = useCartStore();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export function CartDisplay() {
                   ${item.price.toFixed(2)} each
                 </p>
                 <button
-                  // onClick={() => removeItem(item.id)}
+                  onClick={() => removeItem(item.id)}
                   className="text-red-500 text-sm hover:underline mt-2 font-medium"
                 >
                   Remove
@@ -75,7 +75,7 @@ export function CartDisplay() {
               </div>
               <div className="flex items-center gap-3">
                 <button
-                  // onClick={() => updateQuantity(item.id, 'decrease')}
+                  onClick={() => updateQuantity(item.id, "decrease")}
                   className="px-3 py-1 border rounded-md hover:bg-slate-100 transition"
                 >
                   -
@@ -84,7 +84,7 @@ export function CartDisplay() {
                   {item.quantity}
                 </span>
                 <button
-                  // onClick={() => updateQuantity(item.id, 'increase')}
+                  onClick={() => updateQuantity(item.id, "increase")}
                   className="px-3 py-1 border rounded-md hover:bg-slate-100 transition"
                 >
                   +

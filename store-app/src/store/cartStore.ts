@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-// Define the shape of a product in the cart
 export interface CartItem {
   id: number;
   name: string;
@@ -10,13 +9,13 @@ export interface CartItem {
   quantity: number;
 }
 
-// Define the shape of the store's state
 interface CartState {
   items: CartItem[];
   addToCart: (product: Omit<CartItem, "quantity">) => void;
+  removeItem: (productId: number) => void;
+  updateQuantity: (productId: number, action: "increase" | "decrease") => void;
 }
 
-// A helper function to safely access localStorage
 const safeLocalStorage = {
   getItem: (name: string) => {
     if (typeof window === "undefined") return null;
@@ -37,20 +36,51 @@ export const useCartStore = create<CartState>()(
     (set, get) => ({
       items: [],
       addToCart: (product) => {
-        const cart = get().items;
-        const findProduct = cart.find((p) => p.id === product.id);
+        const currentItems = get().items;
+        const existingItem = currentItems.find(
+          (item) => item.id === product.id
+        );
 
-        if (findProduct) {
-          findProduct.quantity += 1;
+        if (existingItem) {
+          // If item exists, update its quantity
+          const updatedItems = currentItems.map((item) =>
+            item.id === product.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          );
+          set({ items: updatedItems });
         } else {
-          cart.push({ ...product, quantity: 1 });
+          // If item is new, add it to the cart
+          set({ items: [...currentItems, { ...product, quantity: 1 }] });
         }
+      },
 
-        set({ items: [...cart] });
+      removeItem: (productId) => {
+        // Filter out the item to be removed, creating a new array
+        const updatedItems = get().items.filter(
+          (item) => item.id !== productId
+        );
+        set({ items: updatedItems });
+      },
+
+      updateQuantity: (productId, action) => {
+        const updatedItems = get().items.map((item) => {
+          if (item.id === productId) {
+            if (action === "increase") {
+              return { ...item, quantity: item.quantity + 1 };
+            }
+            // Ensure quantity doesn't go below 1
+            if (action === "decrease" && item.quantity > 1) {
+              return { ...item, quantity: item.quantity - 1 };
+            }
+          }
+          return item;
+        });
+        set({ items: updatedItems });
       },
     }),
     {
-      name: "cart-storage", // The key in localStorage
+      name: "cart-storage",
       storage: createJSONStorage(() => safeLocalStorage),
     }
   )

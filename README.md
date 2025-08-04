@@ -42,7 +42,7 @@ This project is designed to be run with Docker, which handles all the necessary 
 1.  **Clone the Repository**:
 
     ```bash
-    git clone <your-repository-url>
+    git clone https://github.com/Axiean/micro-store
     cd micro-store
     ```
 

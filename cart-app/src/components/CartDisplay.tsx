@@ -37,7 +37,7 @@ export function CartDisplay() {
           Your Cart is Empty
         </h2>
         <p className="mt-2 text-slate-500">
-          Looks like you haven't added anything yet.
+          Looks like you haven`&apos;` t added anything yet.
         </p>
       </div>
     );

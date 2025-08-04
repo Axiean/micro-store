@@ -1,22 +1,33 @@
 import { ProductCard } from "@/components/ProductCart";
 
+// Define the shape of the product data fetched from the API for type safety.
 interface Product {
   id: number;
   title: string;
   price: number;
-  description: string;
-  category: string;
   image: string;
 }
 
+/**
+ * Enables Incremental Static Regeneration (ISR) for this page.
+ * Next.js will serve a cached, static version of this page for fast initial loads.
+ * In the background, it will re-fetch the data at most once every hour (3600 seconds)
+ * to ensure the product list stays reasonably fresh without sacrificing performance.
+ */
+export const revalidate = 3600;
+
+/**
+ * Fetches product data on the server at build time and during revalidation.
+ * This server-side approach improves SEO and performance by delivering a fully
+ * rendered HTML page to the client.
+ */
 async function getProducts(): Promise<Product[]> {
-  // Fetch from the Fake Store API
   const res = await fetch("https://fakestoreapi.com/products", {
-    // We can still use revalidate here for ISR
-    next: { revalidate: 3600 },
+    next: { revalidate }, // This uses the revalidate value defined above.
   });
 
   if (!res.ok) {
+    // This will be caught by the nearest error boundary.
     throw new Error("Failed to fetch products");
   }
 
@@ -33,8 +44,7 @@ export default async function HomePage() {
           Our Latest Collection
         </h1>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-slate-600 dark:text-slate-300">
-          Discover high-quality apparel and accessories designed for the modern
-          lifestyle.
+          Discover high-quality products from our Fake Store API.
         </p>
       </div>
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">

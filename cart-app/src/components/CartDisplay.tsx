@@ -6,15 +6,18 @@ import { CartItemCard } from "./CartItemCard";
 import { OrderSummary } from "./OrderSummary";
 
 /**
- * The main component for displaying the cart. It handles the client-side hydration
- * and orchestrates the rendering of the item list and order summary.
+ * The main component for displaying the cart. It handles client-side state and hydration.
+ * The cart data is persisted in localStorage, which is only accessible in the browser.
+ * This component ensures a smooth user experience by handling the difference between
+ * the server-rendered state (always empty) and the client-rendered state.
  */
 export function CartDisplay() {
   const { items, removeItem, updateQuantity } = useCartStore();
   const [isClient, setIsClient] = useState(false);
 
-  // This effect runs once after the component mounts on the client,
-  // preventing hydration mismatches with server-rendered content.
+  // This effect runs once after the component mounts on the client.
+  // By setting `isClient` to true, we trigger a re-render and can safely
+  // access localStorage data without causing a hydration mismatch error.
   useEffect(() => {
     setIsClient(true);
   }, []);

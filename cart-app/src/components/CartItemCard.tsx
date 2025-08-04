@@ -1,22 +1,21 @@
-
-
-
-
-
-import Image from 'next/image';
-import type { CartItem  , CartState} from '@/store/cartStore';
+import Image from "next/image";
+import type { CartItem, CartState } from "@/store/cartStore";
 
 type CartItemProps = {
   item: CartItem;
-  updateQuantity: CartState['updateQuantity'];
-  removeItem: CartState['removeItem'];
+  updateQuantity: CartState["updateQuantity"];
+  removeItem: CartState["removeItem"];
 };
 
 /**
  * Renders a single item in the shopping cart, including controls
  * for quantity and removal.
  */
-export function CartItemCard({ item, updateQuantity, removeItem }: CartItemProps) {
+export function CartItemCard({
+  item,
+  updateQuantity,
+  removeItem,
+}: CartItemProps) {
   return (
     <li className="flex flex-col sm:flex-row items-center gap-4 py-6 border-b">
       <div className="relative w-24 h-24 flex-shrink-0">
@@ -24,7 +23,7 @@ export function CartItemCard({ item, updateQuantity, removeItem }: CartItemProps
           src={item.imageUrl}
           alt={item.name}
           fill
-          style={{ objectFit: 'contain' }}
+          style={{ objectFit: "contain" }}
           className="rounded-md"
         />
       </div>
@@ -40,14 +39,14 @@ export function CartItemCard({ item, updateQuantity, removeItem }: CartItemProps
       </div>
       <div className="flex items-center gap-3">
         <button
-          onClick={() => updateQuantity(item.id, 'decrease')}
+          onClick={() => updateQuantity(item.id, "decrease")}
           className="px-3 py-1 border rounded-md hover:bg-slate-100 transition"
         >
           -
         </button>
         <span className="font-semibold w-8 text-center">{item.quantity}</span>
         <button
-          onClick={() => updateQuantity(item.id, 'increase')}
+          onClick={() => updateQuantity(item.id, "increase")}
           className="px-3 py-1 border rounded-md hover:bg-slate-100 transition"
         >
           +

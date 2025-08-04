@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-// Define the shape of a product in the cart
 export interface CartItem {
   id: number;
   name: string;

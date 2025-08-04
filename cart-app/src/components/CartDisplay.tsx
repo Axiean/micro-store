@@ -1,26 +1,36 @@
 "use client";
 
-import { useCartStore, CartItem } from "@/store/cartStore";
+import { useCartStore } from "@/store/cartStore";
 import Image from "next/image";
-import { useState, useEffect } from "react"; // Import useState and useEffect
+import { useState, useEffect } from "react";
 
 export function CartDisplay() {
-  const items = useCartStore((state) => state.items);
-  // Create a state to track if the component has mounted on the client
+  const { items } = useCartStore();
   const [isClient, setIsClient] = useState(false);
 
-  // Set isClient to true only after the component mounts
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // If we're on the server or before the client has mounted, render nothing or a loader
   if (!isClient) {
-    return <p className="text-center text-gray-500">Loading cart...</p>;
+    return (
+      <div className="text-center py-10">
+        <p className="text-lg text-slate-500">Loading Your Cart...</p>
+      </div>
+    );
   }
 
   if (items.length === 0) {
-    return <p className="text-center text-gray-500">Your cart is empty.</p>;
+    return (
+      <div className="text-center py-20 bg-white rounded-lg shadow-md">
+        <h2 className="text-2xl font-semibold text-slate-700">
+          Your Cart is Empty
+        </h2>
+        <p className="mt-2 text-slate-500">
+          Looks like you haven't added anything to your cart yet.
+        </p>
+      </div>
+    );
   }
 
   const totalPrice = items.reduce(
@@ -29,32 +39,85 @@ export function CartDisplay() {
   );
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <ul className="space-y-4">
-        {items.map((item) => (
-          <li
-            key={item.id}
-            className="flex items-center gap-4 p-4 border rounded-lg shadow-sm"
-          >
-            <Image
-              src={item.imageUrl}
-              alt={item.name}
-              width={64}
-              height={64}
-              className="rounded-md"
-            />
-            <div className="flex-grow">
-              <h3 className="font-semibold">{item.name}</h3>
-              <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
-            </div>
-            <p className="font-semibold">
-              ${(item.price * item.quantity).toFixed(2)}
-            </p>
-          </li>
-        ))}
-      </ul>
-      <div className="mt-8 text-right">
-        <h2 className="text-2xl font-bold">Total: ${totalPrice.toFixed(2)}</h2>
+    <div className="w-full max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+      <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-2xl font-bold border-b pb-4 mb-6 text-gray-800">
+          Your Items
+        </h2>
+        <ul className="space-y-6">
+          {items.map((item) => (
+            <li
+              key={item.id}
+              className="flex flex-col sm:flex-row items-center gap-4"
+            >
+              <div className="relative w-24 h-24 flex-shrink-0">
+                <Image
+                  src={item.imageUrl}
+                  alt={item.name}
+                  fill
+                  style={{ objectFit: "contain" }}
+                  className="rounded-md"
+                />
+              </div>
+              <div className="flex-grow text-center sm:text-left">
+                <h3 className="font-semibold text-lg text-slate-800">
+                  {item.name}
+                </h3>
+                <p className="text-sm text-slate-500">
+                  ${item.price.toFixed(2)} each
+                </p>
+                <button
+                  // onClick={() => removeItem(item.id)}
+                  className="text-red-500 text-sm hover:underline mt-2 font-medium"
+                >
+                  Remove
+                </button>
+              </div>
+              <div className="flex items-center gap-3">
+                <button
+                  // onClick={() => updateQuantity(item.id, 'decrease')}
+                  className="px-3 py-1 border rounded-md hover:bg-slate-100 transition"
+                >
+                  -
+                </button>
+                <span className="font-semibold w-8 text-center">
+                  {item.quantity}
+                </span>
+                <button
+                  // onClick={() => updateQuantity(item.id, 'increase')}
+                  className="px-3 py-1 border rounded-md hover:bg-slate-100 transition"
+                >
+                  +
+                </button>
+              </div>
+              <p className="font-bold text-lg w-24 text-right text-slate-900">
+                ${(item.price * item.quantity).toFixed(2)}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="lg:col-span-1 bg-white rounded-lg shadow-md p-6 sticky top-8">
+        <h2 className="text-2xl font-bold border-b pb-4 mb-6 text-gray-700">
+          Order Summary
+        </h2>
+        <div className="space-y-4 text-slate-600">
+          <div className="flex justify-between">
+            <span>Subtotal</span>
+            <span>${totalPrice.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Shipping</span>
+            <span className="font-semibold text-green-500">FREE</span>
+          </div>
+          <div className="border-t pt-4 mt-4 flex justify-between font-bold text-xl text-slate-900">
+            <span>Total</span>
+            <span>${totalPrice.toFixed(2)}</span>
+          </div>
+        </div>
+        <button className="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition">
+          Proceed to Checkout
+        </button>
       </div>
     </div>
   );
